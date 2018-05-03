@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>资源分类管理</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/index.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+			<!-- <label >用户名：</label>
+					<input type="text"  v-model="q.username"  placeholder="用户名">&nbsp;&nbsp;
+					 -->
+		<div class="grid-btn">
+			<br/>
+			<a v-if="hasPermission('sys:user:save')" class="btn btn-primary" id="adding" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('sys:user:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;批量删除</a>
+			<!-- <a class="btn btn-warning" id="querying" @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a>-->
+		</div> 
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+    <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal">
+			<div style="display: show">
+				<div class="form-group">
+				   	<div  class="col-sm-5 control-label">{{navTitle}}序号</div>
+				   	<div class="col-sm-7" style="text-align:center">
+				   		<input id="orderby" type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count" @blur="onBlur"/>
+				        <span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-5 control-label">{{navTitle}}名称</div>
+				   	<div class="col-sm-7">
+				      <input type="text" class="form-control" v-model="reso.name" @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+		<!-- <div id="0" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-2 control-label">主分类序号</div>
+				   	<div class="col-sm-10" style="text-align:center">
+				   		<input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count" @blur="onBlur"/>
+				        {{count}}
+				       {{navTitle}}
+				        <span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">主分类名称</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="reso.name" @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+			<div id="1" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-2 control-label">领域分类序号</div>
+				   	<div class="col-sm-10" style="text-align:center">
+				        <input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count"  @blur="onBlur"/>
+				    	<span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">领域分类名称</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="reso.name"  @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+			<div id="2" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-2 control-label">年龄分类序号</div>
+				   	<div class="col-sm-10" style="text-align:center">
+				        <input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count"  @blur="onBlur"/>
+				    	<span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-2 control-label">年龄分类名称</div>
+				   	<div class="col-sm-10">
+				      <input type="text" class="form-control" v-model="reso.name"  @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+			<div id="3" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-5 control-label">资源类型分类序号</div>
+				   	<div class="col-sm-7" style="text-align:center">
+				        <input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count"  @blur="onBlur"/>
+				    	<span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-5 control-label">资源类型分类名称</div>
+				   	<div class="col-sm-7">
+				      <input type="text" class="form-control" v-model="reso.name"  @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+			<div id="4" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-5 control-label">特色课程分类序号</div>
+				   	<div class="col-sm-7" style="text-align:center">
+				        <input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count"  @blur="onBlur"/>
+				    	<span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-5 control-label">特色课程分类名称</div>
+				   	<div class="col-sm-7">
+				      <input type="text" class="form-control" v-model="reso.name" @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div>
+			<div id="96" class="idnames" style="display: none">
+				<div class="form-group">
+				   	<div id="resoname" class="col-sm-5 control-label">测试分类序号</div>
+				   	<div class="col-sm-7" style="text-align:center">
+				        <input type="text" disabled="true" style="text-align: center;"  class="form-control" v-model="count"  @blur="onBlur"/>
+				    	<span class="sp1"></span>
+				    </div>
+				</div>
+				<div class="form-group">
+				   	<div class="col-sm-5 control-label">测试名称</div>
+				   	<div class="col-sm-7">
+				      <input type="text" class="form-control" v-model="reso.name" @blur="onBlur1"/>
+				      <span class="sp2"></span>
+				    </div>
+				</div>
+			</div> -->
+			 <div class="form-group">
+				<div class="col-sm-5 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>
+</div>
+<script src="../../js/modules/reso/reso.js"></script>
+</body>
+</html>

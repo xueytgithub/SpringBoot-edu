@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.modules.activity.dao.ActivityDao" >
+  <resultMap id="BaseResultMap" type="io.renren.modules.activity.entity.Activity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="number" property="number" jdbcType="VARCHAR" />
+    <result column="filename" property="filename" jdbcType="VARCHAR" />
+    <result column="fileurl" property="fileurl" jdbcType="VARCHAR" />
+    <result column="thumbnailurl" property="thumbnailurl" jdbcType="VARCHAR" />
+    <result column="materialtype" property="materialtype" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="classes" property="classes" jdbcType="VARCHAR" />
+    <result column="term" property="term" jdbcType="VARCHAR" />
+    <result column="territory" property="territory" jdbcType="VARCHAR" />
+    <result column="activityname" property="activityname" jdbcType="VARCHAR" />
+    <result column="oneclassify" property="oneclassify" jdbcType="VARCHAR" />
+    <result column="twoclassify" property="twoclassify" jdbcType="VARCHAR" />
+    <result column="threeclassify" property="threeclassify" jdbcType="VARCHAR" />
+    <result column="fourclassify" property="fourclassify" jdbcType="VARCHAR" />
+    <result column="fiveclassify" property="fiveclassify" jdbcType="VARCHAR" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+    <result column="isdownload" property="isdownload" jdbcType="BIGINT" />
+    <result column="isfree" property="isfree" jdbcType="BIGINT" />
+    <result column="isprint" property="isprint" jdbcType="BIGINT" />
+    <result column="isappbrowse" property="isappbrowse" jdbcType="BIGINT" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="touristplaytime" property="touristplaytime" jdbcType="INTEGER" />
+    <result column="vipplaytime" property="vipplaytime" jdbcType="INTEGER" />
+    <result column="userid" property="userid" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="BIGINT" />
+    <result column="flag" property="flag" jdbcType="BIGINT" />
+    <result column="filesize" property="filesize" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, number, filename, fileurl, thumbnailurl, materialtype, type, classes, term, territory, 
+    activityname, oneclassify, twoclassify, threeclassify, fourclassify, fiveclassify, 
+    keyword, isdownload, isfree, isprint, isappbrowse, price, touristplaytime, vipplaytime, 
+    userid,create_time,update_time,flag,filesize
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_activity
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_activity
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insertSelective" parameterType="io.renren.modules.activity.entity.Activity" >
+    insert into tb_activity
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="number != null" >
+        number,
+      </if>
+      <if test="filename != null" >
+        filename,
+      </if>
+      <if test="fileurl != null" >
+        fileurl,
+      </if>
+      <if test="thumbnailurl != null" >
+        thumbnailurl,
+      </if>
+      <if test="materialtype != null" >
+        materialtype,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="classes != null" >
+        classes,
+      </if>
+      <if test="term != null" >
+        term,
+      </if>
+      <if test="territory != null" >
+        territory,
+      </if>
+      <if test="activityname != null" >
+        activityname,
+      </if>
+      <if test="oneclassify != null" >
+        oneclassify,
+      </if>
+      <if test="twoclassify != null" >
+        twoclassify,
+      </if>
+      <if test="threeclassify != null" >
+        threeclassify,
+      </if>
+      <if test="fourclassify != null" >
+        fourclassify,
+      </if>
+      <if test="fiveclassify != null" >
+        fiveclassify,
+      </if>
+      <if test="keyword != null" >
+        keyword,
+      </if>
+      <if test="isdownload != null" >
+        isdownload,
+      </if>
+      <if test="isfree != null" >
+        isfree,
+      </if>
+      <if test="isprint != null" >
+        isprint,
+      </if>
+      <if test="isappbrowse != null" >
+        isappbrowse,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="touristplaytime != null" >
+        touristplaytime,
+      </if>
+      <if test="vipplaytime != null" >
+        vipplaytime,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="filesize != null" >
+        filesize,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="number != null" >
+        #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileurl != null" >
+        #{fileurl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailurl != null" >
+        #{thumbnailurl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialtype != null" >
+        #{materialtype,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="classes != null" >
+        #{classes,jdbcType=VARCHAR},
+      </if>
+      <if test="term != null" >
+        #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="territory != null" >
+        #{territory,jdbcType=VARCHAR},
+      </if>
+      <if test="activityname != null" >
+        #{activityname,jdbcType=VARCHAR},
+      </if>
+      <if test="oneclassify != null" >
+        #{oneclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="twoclassify != null" >
+        #{twoclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="threeclassify != null" >
+        #{threeclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="fourclassify != null" >
+        #{fourclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="fiveclassify != null" >
+        #{fiveclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="isdownload != null" >
+        #{isdownload,jdbcType=BIGINT},
+      </if>
+      <if test="isfree != null" >
+        #{isfree,jdbcType=BIGINT},
+      </if>
+      <if test="isprint != null" >
+        #{isprint,jdbcType=BIGINT},
+      </if>
+      <if test="isappbrowse != null" >
+        #{isappbrowse,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="touristplaytime != null" >
+        #{touristplaytime,jdbcType=INTEGER},
+      </if>
+      <if test="vipplaytime != null" >
+        #{vipplaytime,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="flag != null" >
+        #{flag},
+      </if>
+      <if test="filesize != null" >
+        #{filesize},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="io.renren.modules.activity.entity.Activity" >
+    update tb_activity
+    <set >
+      <if test="number != null" >
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+      <if test="filename != null" >
+        filename = #{filename,jdbcType=VARCHAR},
+      </if>
+      <if test="fileurl != null" >
+        fileurl = #{fileurl,jdbcType=VARCHAR},
+      </if>
+      <if test="thumbnailurl != null" >
+        thumbnailurl = #{thumbnailurl,jdbcType=VARCHAR},
+      </if>
+      <if test="materialtype != null" >
+        materialtype = #{materialtype,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="classes != null" >
+        classes = #{classes,jdbcType=VARCHAR},
+      </if>
+      <if test="term != null" >
+        term = #{term,jdbcType=VARCHAR},
+      </if>
+      <if test="territory != null" >
+        territory = #{territory,jdbcType=VARCHAR},
+      </if>
+      <if test="activityname != null" >
+        activityname = #{activityname,jdbcType=VARCHAR},
+      </if>
+      <if test="oneclassify != null" >
+        oneclassify = #{oneclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="twoclassify != null" >
+        twoclassify = #{twoclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="threeclassify != null" >
+        threeclassify = #{threeclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="fourclassify != null" >
+        fourclassify = #{fourclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="fiveclassify != null" >
+        fiveclassify = #{fiveclassify,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        keyword = #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="isdownload != null" >
+        isdownload = #{isdownload,jdbcType=BIGINT},
+      </if>
+      <if test="isfree != null" >
+        isfree = #{isfree,jdbcType=BIGINT},
+      </if>
+      <if test="isprint != null" >
+        isprint = #{isprint,jdbcType=BIGINT},
+      </if>
+      <if test="isappbrowse != null" >
+        isappbrowse = #{isappbrowse,jdbcType=BIGINT},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="touristplaytime != null" >
+        touristplaytime = #{touristplaytime,jdbcType=INTEGER},
+      </if>
+      <if test="vipplaytime != null" >
+        vipplaytime = #{vipplaytime,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="filesize != null" >
+        filesize = #{filesize},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="queryList" resultMap="BaseResultMap">
+  	select * from tb_activity t
+  	<where>
+	  	<if test="flag != null and flag != ''">
+	  		and t.flag = #{flag}
+	  	</if>
+	  	<if test="territory != null and territory != '-1'">
+	  		and (t.oneclassify = #{territory} or t.territory = #{territory})
+	  	</if>
+	  	<!-- <if test="territory != null and territory != '-1'">
+	  		and t.territory = #{territory}
+	  	</if> -->
+	  	<if test="course != null and course != '-1'">
+	  		and t.territory = #{course}
+	  	</if>
+	  	<if test="age != null and age != '-1'">
+	  		and t.classes = #{age}
+	  	</if>
+	  	<if test="term != null and term != '-1'">
+	  		and t.term = #{term}
+	  	</if>
+	  	<if test="keyword != null and keyword != ''">
+	  		and
+	  		<foreach collection="keyword" item="key" open="(" separator="or" close=")">
+	  		 	t.keyword like '%${key}%'
+	  		</foreach>
+	  	</if>
+  	</where>
+  	<choose>
+		<when test="sidx != null and sidx.trim() != ''">
+			order by t.${sidx} ${order}
+		</when>
+		<otherwise>
+			order by t.id
+		</otherwise>
+	</choose>
+  	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+  </select>
+</mapper>

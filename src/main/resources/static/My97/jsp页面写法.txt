@@ -1,0 +1,8 @@
+﻿1.在页面引入WdatePicker.js
+ <script type="text/javascript" src="<%=request.getContextPath() %>/js/My97/My97DatePicker/WdatePicker.js"></script>
+2.使用My97的input框写法：
+<input  class="Wdate"  type="text" name="" onClick="WdatePicker()">
+
+
+所有js  引入 inc.jsp 路径
+<jsp:include page="/js/inc.jsp"></jsp:include>

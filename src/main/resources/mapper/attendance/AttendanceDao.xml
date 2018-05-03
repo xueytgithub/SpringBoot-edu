@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.modules.attendance.dao.AttendanceDao" >
+  <resultMap id="BaseResultMap" type="io.renren.modules.attendance.entity.AttendanceEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="checkin" property="checkin" jdbcType="TIMESTAMP" />
+    <result column="statusin" property="statusin" jdbcType="VARCHAR" />
+    <result column="checkout" property="checkout" jdbcType="TIMESTAMP" />
+    <result column="statusout" property="statusout" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, checkin, statusin, checkout, statusout, remark, user_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_attendance
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from tb_attendance
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="insertSelective" parameterType="io.renren.modules.attendance.entity.AttendanceEntity" >
+    insert into tb_attendance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="checkin != null" >
+        checkin,
+      </if>
+      <if test="statusin != null" >
+        statusin,
+      </if>
+      <if test="checkout != null" >
+        checkout,
+      </if>
+      <if test="statusout != null" >
+        statusout,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="checkin != null" >
+        #{checkin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusin != null" >
+        #{statusin,jdbcType=VARCHAR},
+      </if>
+      <if test="checkout != null" >
+        #{checkout,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusout != null" >
+        #{statusout,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="io.renren.modules.attendance.entity.AttendanceEntity" >
+    update tb_attendance
+    <set >
+      <if test="checkin != null" >
+        checkin = #{checkin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusin != null" >
+        statusin = #{statusin,jdbcType=VARCHAR},
+      </if>
+      <if test="checkout != null" >
+        checkout = #{checkout,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusout != null" >
+        statusout = #{statusout,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 列表查询 -->
+  <select id="queryList" resultMap="BaseResultMap">
+    select t.*,u.username,d.name deptname,d.dept_id,d.parent_id from (
+  		select id, checkin, statusin, checkout, statusout, remark, user_id from tb_attendance) t
+  	left join sys_user u on t.user_id=u.user_id
+  	left join sys_dept d on d.dept_id=u.dept_id
+  	<where>
+  		<if test="userid != null and userid != ''">
+  			and t.user_id = #{userid}
+  		</if>
+  		<if test="againtime != null and againtime != ''">
+  			and date_format(checkin,'%Y-%m-%d') = '${againtime}'
+  		</if>
+  		<if test="queryname != null and queryname != '' and queryname != 'null'">
+  			and u.username like '%${queryname}%'
+  		</if>
+  		<if test="querymonth != null and querymonth != ''">
+  			and date_format(checkin,'%Y-%m') = '${querymonth}'
+  		</if>
+  		<if test="deptid != null and deptid != '-1'">
+  			and ( d.dept_id = '${deptid}' or d.parent_id = '${deptid}')
+  		</if>
+  		<if test="deptid2 != null and deptid2 != '-1'">
+  			and d.dept_id = '${deptid2}'
+  		</if>
+  		<if test="querystatusin != null and querystatusin != '' and querystatusin != 'null'">
+  			and t.statusin like '%${querystatusin}%'
+  		</if>
+  		<if test="querystatusout != null and querystatusout != '' and querystatusout != 'null'">
+  			<if test="querystatusout=='-1'">
+  				and t.statusout is null
+  			</if>
+  			<if test="querystatusout!='-1'">
+  				and t.statusout like '%${querystatusout}%'
+  			</if>
+  		</if>
+  		<if test="queryday != null and queryday != ''">
+  			and date_format(checkin,'%Y-%m-%d') = '${queryday}'
+  		</if>
+  	</where>
+  	<choose>
+		<when test="sidx != null and sidx.trim() != ''">
+			order by t.${sidx} ${order}
+		</when>
+		<otherwise>
+			order by t.checkin desc,t.user_id desc
+		</otherwise>
+	</choose>
+	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+  </select>
+  
+</mapper>

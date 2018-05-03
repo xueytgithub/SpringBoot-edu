@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<style type="text/css">
+
+</style>
+</head>
+<body>
+<form id="saveOrupdate">
+<table align="center" border="1" style="width:500px;height: 70px;">
+	 <tr>
+		<td>时间</td>
+		<td><input  class="Wdate"  type="text" id="date" onClick="WdatePicker()"></td>
+	</tr> 
+	<tr>
+		<td>说明</td>
+		<td><textarea rows="5" cols="20" id="text"></textarea></td>
+	</tr>
+	<tr>
+		<td>类型</td>
+		<td>
+		    <input type="radio" name="type" value="0">收入
+		    <input type="radio" name="type" value="1">支出
+		</td>
+	</tr>
+	<tr>
+		<td>费用</td>
+		<td><input type="text" id="money"></td>
+	</tr>
+	<!-- <tr>
+		<td colspan="2" align="center"><button value="提交" onclick="saveOrUpdate()">提交</button></td>
+	</tr> -->
+</table>
+</form>
+<script src="../../js/modules/life/life.js"></script>
+</body>
+</html>

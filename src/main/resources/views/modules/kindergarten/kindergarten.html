@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>幼儿园管理</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+		<label >幼儿园名称：</label>
+			<input type="text"  v-model="q.kinname"  placeholder="幼儿园名称">&nbsp;&nbsp;
+		<label >代理商名称：</label>
+			<input type="text"  v-model="q.proname"  placeholder="代理商名称">&nbsp;&nbsp;
+		<label >地址查询：</label>
+			  省<select id="QProvince" v-model="q.province">
+               </select>
+			  市<select id="QCity" v-model="q.city">
+               </select>
+			  县<select id="QVillage" v-model="q.county">
+               </select>
+             <br><br>
+        <label >创建开始时间：</label>
+             <input  class="Wdate"  type="text" id="startTime" v-model="q.startTime" onClick="WdatePicker()">
+        <label >创建结束时间：</label>
+             <input  class="Wdate"  type="text" id="endTime" v-model="q.endTime" onClick="WdatePicker()">
+            &nbsp;&nbsp;	
+			<a class="btn btn-warning"  @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a> 
+			<br/><br/>
+		 <div class="hidepro" class="grid-btn">
+			<a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('sys:user:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;批量删除</a>
+		</div>  
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+     <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal" style="width: 750px">
+			<div class="form-group">
+			   	<div id="resoname" style="width: 130px;" class="col-sm-1 control-label">幼儿园名称</div>
+			   	<div class="col-sm-10">
+			   		<input type="text"  class="form-control" placeholder="幼儿园名称 必填" v-model="kin.name"/>
+			    </div>
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			
+			<div class="form-group">
+                <div class="col-sm-1 text-right" style="width: 100px;">省</div>
+                <div class="col-sm-2" style="width: 100px; margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" name="Province" id="Province" v-model="kin.province">
+                        <!-- <option>==请选择===</option> -->
+                    </select>
+                </div>
+                <div class="col-sm-1 text-right" style="width: 100px;"> 市</div>
+                <div class="col-sm-2" style="width: 100px; margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" name="City" id="City" v-model="kin.city">
+                    </select>
+                </div>
+                <div class="col-sm-1 text-right" style="width: 100px;">县/区</div>
+                <div class="col-sm-2" style="width: 100px;margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" name="Village" id="Village" v-model="kin.county">
+                    </select>
+                </div>
+                <span style="display:block; float:left;margin-left: 20px;" ><font color="red">必填*</font></span>
+            </div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-1 control-label" placeholder="详细地址" style="width: 130px;">详细地址</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="kin.address"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-1 control-label" style="width: 130px;">幼儿园电话</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" placeholder="手机号或固定电话 必填" v-model="kin.phone" @blur="onBlur"/>
+			      <span class="sp1"></span>
+			    </div>
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-1 control-label" style="width: 130px;">幼儿园规模</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="kin.scale"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-1 control-label" style="width: 130px;">所得分成</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="kin.divide"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-1 control-label" style="width: 130px;">代理商</div>
+			   	<div class="col-sm-10">
+		          <select id="proname">
+				    <option value=''>无</option>
+				    <option v-for="pro in loadList" :value='pro.proxyid' v-model="kin.proxyid">{{pro.name}}</option>
+			      </select>
+			    </div>
+			</div>
+			 <div class="form-group">
+				<div class="col-sm-5 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div> 
+</div>
+<script src="../../js/modules/kindergarten/kindergarten.js"></script>
+</body>
+</html>

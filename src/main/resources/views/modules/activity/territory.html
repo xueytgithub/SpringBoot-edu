@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>领域管理</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/fileinput.min.css">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../js/fileinput.min.js"></script>
+<script src="../../js/zh.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+
+
+
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+		<label >一级分类：</label>
+	  		 <select id="territory">
+			   <option value='-1'>请选择</option>
+			   <option v-for="territory in territoryList" :value='territory.name' v-model="q.oneclassify">{{territory.name}}</option>
+			 </select>
+		  <!-- <div class="btn-group">
+			  <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			    请选择 <span class="caret"></span>
+			  </button>
+			  <ul class="dropdown-menu">
+			    <li v-for="territory in territoryList" :value='territory.name' v-model="activity.oneclassify"><a href="#">{{territory.name}}</a></li>
+			  </ul>
+		  </div> -->
+		 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label >年龄分类：</label>
+	  		 <select id="age">
+			   <option value='-1'>请选择</option>
+			   <option v-for="age in ageList" :value='age.name' v-model="q.twoclassify">{{age.name}}</option>
+			 </select> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<label >学期分类：</label>
+	  		 <select id="term">
+			   <option value='-1'>请选择</option>
+			   <option v-for="term in termList" :value='term.name' v-model="q.threeclassify">{{term.name}}</option>
+			 </select> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 <label >搜索关键字：</label>
+			<input type="text"  v-model="q.keyword"  placeholder="请输入您要搜索的资源   ">&nbsp;&nbsp;
+            &nbsp;&nbsp;
+			<a class="btn btn-warning"  @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a>
+			<br/><br/>
+		 <div class="hidepro" class="grid-btn">
+			<a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('sys:user:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;批量删除</a>
+			<a v-if="hasPermission('sys:user:delete')" class="btn btn-primary" @click="clearCache"><i class="fa fa-trash-o"></i>&nbsp;清除缓存图片</a>
+		</div>   
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+     <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal" style="width: 750px">
+			<div class="form-group">
+			   	<div id="resoname" class="col-sm-2 control-label" style="text-align: left;width:130px">活动名称</div>
+			   	<div class="col-sm-10">
+			   		<input type="text" class="form-control" placeholder="活动名称 " v-model="activity.activityname"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="text-align: left;width:130px">文件上传</div>
+			   	<div class="col-sm-10" id="fileload">
+   					<input id="myFile" type="file" name="myFile" class="fileloading" multiple> 
+			    </div>
+			    <input type="hidden" id="fileurl">
+			    <input type="hidden" id="filesize">
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="text-align: left;width:130px">活动缩略图上传</div>
+			   	<div class="col-sm-10" id="imgload">
+   					<input id="myImg" type="file" name="myFile" class="fileloading"> 
+			    </div>
+			    <input type="hidden" id="thumbnailurl">
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="width: 130px;">搜索关键字设定</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="activity.keyword" placeholder="请设定搜索关键字，用','号隔开 "/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+                <div class="col-sm-1 text-right" style="width: 100px;">一级分类</div>
+                <div class="col-sm-2" style="width: 100px; margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" id="oneclassify">
+	                    <option value='-1'>请选择</option>
+				   		<option v-for="territory in territoryList" :value='territory.name' v-model="activity.oneclassify">{{territory.name}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 text-right" style="width: 100px;">年龄分类</div>
+                <div class="col-sm-2" style="width: 100px; margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" id="twoclassify">
+                    	<option value='-1'>请选择</option>
+			   			<option v-for="age in ageList" :value='age.name' v-model="activity.classes">{{age.name}}</option>
+                    </select>
+                </div>
+                <div class="col-sm-1 text-right" style="width: 100px;">学期分类</div>
+                <div class="col-sm-2" style="width: 100px;margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" id="threeclassify">
+                    	<option value='-1'>请选择</option>
+			   			<option v-for="term in termList" :value='term.name' v-model="activity.term">{{term.name}}</option>
+                    </select>
+                </div>
+                <span style="display:block; float:left;margin-left: 20px;" ><font color="red">必填*</font></span>
+            </div>
+            
+			 <div class="form-group">
+				<div class="col-sm-5 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>  
+</div>
+<script src="../../js/modules/uploadFile.js"></script>
+<script src="../../js/modules/activity/territory.js"></script>
+<script type="text/javascript">
+
+//文件上传
+/* 	projectfileoptions={
+		//multiple  加在input框中可以支持多文件上传
+		//是否显示上传按钮
+	    showUpload :true,
+	    //是否显示移除按钮
+	    showRemove : true,
+	    //语言中文
+	    language : 'zh',
+	    //上传文件发送后台的请求地址
+	    uploadUrl: "<%=request.getContextPath()%>/book/upFile.action",
+	    //允许预览的文件类型
+	    allowedPreviewTypes : [ 'image','text' ],
+	    //允许上传文件的后缀名
+	    allowedFileExtensions : [ 'jpg', 'png', 'gif','txt' ],
+	    //允许上传文件的大小为2000kB
+	    maxFileSize : 2000,
+	    //是否显示图片路径
+	    showCaption:true,
+	    //是否可以预览图片
+	    showPreview:true,
+	    //是否显示关闭预览窗口的图标
+	    showClose:true,
+	    //是否显示选择按钮
+	    showBrowse:true,
+	};
+    
+	$('input[class=projectfile]').each(function() {
+	    var imageurl = $(this).attr("value");
+	    //判断input 标签里的value是否有值，没有则移除掉 value属性
+	    if(imageurl.trim()=='<%=request.getContextPath() %>/book/loadMainImg.action?mainImgId='){
+    		imageurl = $(this).removeAttr("value").imageurl
+    	}
+	    //判断value属性 是否有值 ,value属性不存在则为  undefined 默认false
+	    if (imageurl) {
+	    	var op = $.extend({
+	            initialPreview : [ // 预览图片的设置
+	            "<img width='150px' src='" + imageurl + "' class='file-preview-image'>", ]
+	        }, projectfileoptions);
+
+	        $(this).fileinput(op);
+	    } else {
+	        $(this).fileinput(projectfileoptions);
+	    }
+	});
+	
+	//文件上传前的调用
+ 	$('input[class=projectfile]').each(function() {
+		$(this).on('filepreupload', function(event, data, previewId, index) {
+	        var form = data.form, files = data.files, extra = data.extra,
+	            response = data.response, reader = data.reader;
+	        alert("开始上传");
+	    });
+   }) 
+   
+   	//文件上传后的调用
+	$('input[class=projectfile]').each(function() {
+		
+		$(this).on('fileuploaded', function(event, data, previewId, index) {
+		    var form = data.form, files = data.files, extra = data.extra,
+	        response = data.response, reader = data.reader;
+		    $("#bookImg").val(data.response.id);
+		    //fileId = data.response.id;
+	      //  alert( $("#bookImg").val());
+	    });
+   }) */
+
+</script>
+</body>
+</html>

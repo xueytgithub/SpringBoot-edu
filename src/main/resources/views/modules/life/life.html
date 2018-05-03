@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>生活消费</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link rel="stylesheet" href="../../js/yearmonth/jquery.monthpicker.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/index.js"></script>
+<script src="../../js/yearmonth/jquery.monthpicker.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+		
+		  <div>
+		  	 <label >开始日期：</label>
+             	<input  class="Wdate"  type="text" id="startTime" onClick="WdatePicker()">
+             	&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >结束日期：</label>
+             	<input  class="Wdate"  type="text" id="endTime" onClick="WdatePicker()">
+             	&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >收/支状态：</label>
+			 	<input type="radio" name="late" value="0" v-model="q.type">收入
+			 	<input type="radio" name="late" value="1" v-model="q.type">支出
+			 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<a class="btn btn-warning"  @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a>
+		  </div>
+		 <div>
+		 	<a class="btn btn-info" @click="add">新增</a>
+			<a class="btn btn-warning"  @click="del">删除</a>
+		</div>
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+</div>
+<script src="../../js/modules/life/life.js"></script>
+</body>
+</html>

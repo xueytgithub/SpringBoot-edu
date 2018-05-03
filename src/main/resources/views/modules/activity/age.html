@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>托班管理</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/fileinput.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../js/fileinput.min.js"></script>
+<script src="../../js/zh.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+
+
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+		
+		<label >学期分类：</label>
+	  		 <select id="term">
+			   <option value='-1'>请选择</option>
+			   <option v-for="term in termList" :value='term.name'>{{term.name}}</option>
+			 </select> 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		 <label >搜索关键字：</label>
+			<input type="text"  v-model="q.keyword"  placeholder="请输入您要搜索的资源   ">&nbsp;&nbsp;
+            &nbsp;&nbsp;
+			<a class="btn btn-warning"  @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a>
+			<br/><br/>
+		 <div class="hidepro" class="grid-btn">
+			<a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			<a v-if="hasPermission('sys:user:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;批量删除</a>
+		</div>   
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+     <div v-show="!showList" class="panel panel-default">
+		<div class="panel-heading">{{title}}</div>
+		<form class="form-horizontal" style="width: 750px">
+			<div class="form-group">
+			   	<div id="resoname" class="col-sm-2 control-label" style="text-align: left;width:130px">主题</div>
+			   	<div class="col-sm-10">
+			   		<input type="text"  class="form-control" placeholder="主题 " v-model="activity.territory"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div id="resoname" class="col-sm-2 control-label" style="text-align: left;width:130px">活动名称</div>
+			   	<div class="col-sm-10">
+			   		<input type="text"  class="form-control" placeholder="活动名称 " v-model="activity.activityname"/>
+			    </div>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="text-align: left;width:130px">文件上传</div>
+			   	<div class="col-sm-10" id="fileload">
+   					<input id="myFile" type="file" name="myFile" class="fileloading" multiple> 
+			    </div>
+			    <input type="hidden" id="fileurl">
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="text-align: left;width:130px">活动缩略图上传</div>
+			   	<div class="col-sm-10" id="imgload">
+   					<input id="myImg" type="file" name="myFile" class="fileloading"> 
+			    </div>
+			    <input type="hidden" id="thumbnailurl">
+			    <span style="display:block; float:left;" ><font color="red">必填*</font></span>
+			</div>
+			
+			<div class="form-group">
+			   	<div class="col-sm-2 control-label" style="width: 130px;">搜索关键字设定</div>
+			   	<div class="col-sm-10">
+			      <input type="text" class="form-control" v-model="activity.keyword" placeholder="请设定搜索关键字，用','号隔开 "/>
+			    </div>
+			</div>
+			
+			<div class="form-group">
+                <div class="col-sm-1 text-right" style="width: 100px;">学期分类</div>
+                <div class="col-sm-2" style="width: 100px;margin-left: 0px;padding-left: 0px;">
+                    <select autocomplete="off" style="width: 110px;" class="form-control" id="addterm">
+                    	<option value='-1'>请选择</option>
+			   			<option v-for="term in termList" :value='term.name'>{{term.name}}</option>
+                    </select>
+                </div>
+                <span style="display:block; float:left;margin-left: 20px;" ><font color="red">必填*</font></span>
+            </div>
+            
+			 <div class="form-group">
+				<div class="col-sm-5 control-label"></div> 
+				<input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+			</div>
+		</form>
+	</div>  
+</div>
+<script src="../../js/modules/uploadFile.js"></script>
+<script src="../../js/modules/activity/age.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+   <title>Bootstrap 101 Template</title>
+  <!-- bookstrap核心文件 -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap.min.js"></script>
+  <!-- bookstrap-treeview 核心文件 -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootstrap-treeview/dist/bootstrap-treeview.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
+  <!-- bookstrap-addTabs 核心文件  -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootStrap-addTabs/bootstrap.addtabs.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootStrap-addTabs/bootstrap.addtabs.min.js"></script>
+   <!-- bookstrap-table 核心文件  -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootstrap-table/dist/bootstrap-table.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-table/dist/bootstrap-table.min.js"></script>
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-table/dist/locale/bootstrap-table-zh-CN.min.js"></script>
+  <!-- bookstrap-dialog 核心文件  -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootstrap-dialog/dist/css/bootstrap-dialog.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-dialog/dist/js/bootstrap-dialog.min.js"></script>
+  <!-- bookstrap-datetime 核心文件  -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+  <!-- bookstrap-fileinput 核心文件  -->
+ <link href="<%=request.getContextPath() %>/js/bootstrap/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-fileinput/js/fileinput.min.js"></script>
+ <script src="<%=request.getContextPath() %>/js/bootstrap/bootstrap-fileinput/js/locales/zh.js"></script>
+ 
+</head>
+
+

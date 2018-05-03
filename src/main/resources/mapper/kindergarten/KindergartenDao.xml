@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="io.renren.modules.kindergarten.dao.KindergartenDao" >
+  <resultMap id="BaseResultMap" type="io.renren.modules.kindergarten.entity.KindergartenEntity" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="scale" property="scale" jdbcType="BIGINT" />
+    <result column="buynumbers" property="buynumbers" jdbcType="BIGINT" />
+    <result column="buytime" property="buytime" jdbcType="TIMESTAMP" />
+    <result column="buytime_end" property="buytimeEnd" jdbcType="TIMESTAMP" />
+    <result column="divide" property="divide" jdbcType="DOUBLE" />
+    <result column="type" property="type" jdbcType="BIGINT" />
+    <result column="proxyid" property="proxyid" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, province, city, county, address, phone, scale, buynumbers, buytime, buytime_end, 
+    divide, type, proxyid
+  </sql>
+  
+  <!-- 回显 -->
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_kindergarten
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <!-- 删除 -->
+  <delete id="deleteByPrimaryKey" parameterType="io.renren.modules.kindergarten.entity.KindergartenEntity" >
+  	 <!-- 包含的是sql语句，在小于号"<"比较的时候常用 -->  <![CDATA[   ]]>
+  	 <!-- 主要用于代理商删除前 先修改幼儿园存在的代理商置空 -->
+  	 <if test="type==2">
+	    update tb_kindergarten t2,(select proxyid from tb_kindergarten  where id= #{id} ) t1 
+	    set t2.proxyid=null where t2.type=1  and t2.proxyid = t1.proxyid;
+  	 </if>
+	    delete from tb_kindergarten where id = #{id};
+  </delete>
+
+<!-- 新增 -->
+  <insert id="insertSelective" parameterType="io.renren.modules.kindergarten.entity.KindergartenEntity" >
+    insert into tb_kindergarten
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="scale != null" >
+        scale,
+      </if>
+      <if test="buynumbers != null" >
+        buynumbers,
+      </if>
+      <if test="buytime != null" >
+        buytime,
+      </if>
+      <if test="buytimeEnd != null" >
+        buytime_end,
+      </if>
+      <if test="divide != null" >
+        divide,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="proxyid != null" >
+        proxyid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        #{scale,jdbcType=BIGINT},
+      </if>
+      <if test="buynumbers != null" >
+        #{buynumbers,jdbcType=BIGINT},
+      </if>
+      <if test="buytime != null" >
+        #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buytimeEnd != null" >
+        #{buytimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="divide != null" >
+        #{divide,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=BIGINT},
+      </if>
+      <if test="proxyid != null" >
+        #{proxyid,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  
+  <!-- 修改 -->
+  <update id="updateByPrimaryKeySelective" parameterType="io.renren.modules.kindergarten.entity.KindergartenEntity" >
+    update tb_kindergarten
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="scale != null" >
+        scale = #{scale,jdbcType=BIGINT},
+      </if>
+      <if test="buynumbers != null" >
+        buynumbers = #{buynumbers,jdbcType=BIGINT},
+      </if>
+      <if test="buytime != null" >
+        buytime = #{buytime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="buytimeEnd != null" >
+        buytime_end = #{buytimeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="divide != null" >
+        divide = #{divide,jdbcType=DOUBLE},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=BIGINT},
+      </if>
+        proxyid = #{proxyid,jdbcType=BIGINT},
+      <!-- <if test="proxyid != null" >
+      </if> -->
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 添加用户时加载幼儿园信息 -->
+  <select id="queryList" resultMap="BaseResultMap">
+  	 select id,name from tb_kindergarten where type=1 order by id;
+  </select>
+  
+  <!-- 直接查询幼儿园信息 -->
+  <select id="kinqueryList" resultMap="BaseResultMap">
+  	SELECT (select cityname FROM tb_area tb where t.PROVINCE=tb.id) PROVINCE,
+  	(select cityname FROM tb_area tb where t.CITY=tb.id) CITY,
+	(select cityname FROM tb_area tb where t.COUNTY=tb.id) COUNTY,
+  	T.*,IFNULL(T2.NAME,'无') PROXYNAME
+  	 FROM (
+		SELECT T1.* FROM TB_KINDERGARTEN T1 WHERE T1.TYPE=1) T
+	LEFT JOIN  (SELECT T2.NAME,T2.PROXYID FROM  TB_KINDERGARTEN T2 WHERE T2.TYPE=2) T2 
+	ON T.PROXYID=T2.PROXYID
+	<where>
+		<if test="kinname!=null and kinname!=''">
+			and t.name like '%${kinname}%'
+		</if>
+		<if test="proname!=null and proname!=''">
+			and t2.name like '%${proname}%'
+		</if>
+		<if test="province!=null and province!='-1'">
+			and t.province = #{province}
+		</if>
+		<if test="city!=null and city!='-1'">
+			and t.city = #{city}
+		</if>
+		<if test="county!=null and county!='-1'">
+			and t.county = #{county}
+		</if>
+		<if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+			and date_format(t.BUYTIME,'%Y-%m-%d') >= '${startTime}'
+		</if>
+		<if test="endTime!=null and endTime!='' and (startTime==null or startTime=='')">
+			<![CDATA[
+				and date_format(t.BUYTIME,'%Y-%m-%d') <= '${endTime}'
+			]]>
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+			<![CDATA[
+				and date_format(t.BUYTIME,'%Y-%m-%d') >= '${startTime}' and date_format(t.BUYTIME,'%Y-%m-%d') <= '${endTime}'
+			]]>
+		</if>
+	</where> 
+	<choose>
+		<when test="sidx != null and sidx.trim() != ''">
+			order by t.${sidx} ${order}
+		</when>
+		<otherwise>
+			order by t.id
+		</otherwise>
+	</choose>
+  	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+  </select>
+  
+  <!-- 直接查询代理商信息 -->
+  <select id="proqueryList" resultMap="BaseResultMap">
+  	SELECT T2.*,T1.COUNT scale, 
+  	(select cityname FROM tb_area tb where t2.a1=tb.id) PROVINCE,(select cityname FROM tb_area tb where t2.a2=tb.id) CITY,
+	(select cityname FROM tb_area tb where t2.a3=tb.id) COUNTY
+  	FROM
+	(SELECT ID,PROXYID,NAME,PROVINCE a1,CITY a2,COUNTY a3,ADDRESS,PHONE,BUYTIME,BUYTIME_END FROM TB_KINDERGARTEN WHERE TYPE = 2) T2
+	LEFT JOIN (SELECT PROXYID,COUNT(*) COUNT FROM TB_KINDERGARTEN WHERE TYPE = 1 GROUP BY PROXYID) T1
+	ON T2.PROXYID = T1.PROXYID
+	<where>
+		<if test="proname!=null and proname!=''">
+			and t2.name like '%${proname}%'
+		</if>
+		<if test="province!=null and province!='-1'">
+			and t2.a1 = #{province}
+		</if>
+		<if test="city!=null and city!='-1'">
+			and t2.a2 = #{city}
+		</if>
+		<if test="county!=null and county!='-1'">
+			and t2.a3 = #{county}
+		</if>
+		<if test="startTime!=null and startTime!='' and (endTime==null or endTime=='')">
+			and date_format(t2.BUYTIME,'%Y-%m-%d') >= '${startTime}'
+		</if>
+		<if test="endTime!=null and endTime!='' and (startTime==null or startTime=='')">
+			<![CDATA[
+				and date_format(t2.BUYTIME,'%Y-%m-%d') <= '${endTime}'
+			]]>
+		</if>
+		<if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+			<![CDATA[
+				and date_format(t2.BUYTIME,'%Y-%m-%d') >= '${startTime}' and date_format(t2.BUYTIME,'%Y-%m-%d') <= '${endTime}'
+			]]>
+		</if>
+	</where> 
+	<choose>
+		<when test="sidx != null and sidx.trim() != ''">
+			order by t2.${sidx} ${order}
+		</when>
+		<otherwise>
+			order by t2.PROXYID
+		</otherwise>
+	</choose>
+  	<if test="offset != null and limit != null">
+		limit #{offset}, #{limit}
+	</if>
+  </select>
+  
+  <!-- 查询代理商最大的proxyid值，添加时用到 -->
+  <select id="maxproxyid" resultType="java.lang.Long">
+  	select  IFNULL(max(proxyid),0) as proxyid from tb_kindergarten where type=2;
+  </select>
+</mapper>

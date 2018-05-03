@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>考勤管理</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+<link rel="stylesheet" href="../../css/font-awesome.min.css">
+<link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+<link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+<link rel="stylesheet" href="../../css/main.css">
+<link rel="stylesheet" href="../../js/yearmonth/jquery.monthpicker.css">
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../My97/My97DatePicker/WdatePicker.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.min.js"></script>
+<script src="../../libs/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/index.js"></script>
+<script src="../../js/yearmonth/jquery.monthpicker.js"></script>
+</head>
+<body>
+<div id="rapp" v-cloak>
+	<div v-show="showList">
+		  <div id="allshow" style="float: left;margin-right: 10px">
+			 <label >按月查询：</label>
+			 	<input type="text" class="input" id="monthly">&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >签到状态：</label>
+			 	<input type="radio" name="late" value="正常" v-model="q.querystatusin">正常
+			 	<input type="radio" name="late" value="迟到" v-model="q.querystatusin">迟到
+			 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >签退状态：</label>
+			 	<input type="radio" name="leave" value="正常" v-model="q.querystatusout">正常
+			 	<input type="radio" name="leave" value="早退" v-model="q.querystatusout">早退
+			 	<input type="radio" name="leave" value="-1" v-model="q.querystatusout">无签退
+		  </div>
+		  <div id="adminshow" style="display: none">
+		  	 <label >按天查询：</label>
+             	<input  class="Wdate"  type="text" id="queryday" onClick="WdatePicker()">
+             	&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >部门查询：</label>
+			 	<select id="deptid">
+			 		<option value='-1'>请选择</option>
+				    <option v-for="dept in deptList" :value='dept.deptId'>{{dept.name}}</option>
+			 	</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >子部门：</label>
+			 	<select id="deptid2">
+			 		<option value='-1'>请选择</option>
+				    <option v-for="dept in deptList2" :value='dept.deptId'>{{dept.name}}</option>
+			 	</select>&nbsp;&nbsp;&nbsp;&nbsp;
+			 <label >用户名：</label>
+				<input type="text"  v-model="q.queryname"  placeholder="用户名">&nbsp;&nbsp;&nbsp;&nbsp;
+		  </div>
+		  <div>
+			<a class="btn btn-warning"  @click="query">查询</a>
+			<a class="btn btn-info" @click="reset">重置</a>
+		  </div>	
+		<div class="grid-btn">
+			<br/>
+			<div style="margin-right: 200px;margin-left: 30px;float: left;"><a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="checkin"><i class="fa fa-plus"></i>&nbsp;上班签到</a></div>
+			<div style="margin-right: 350px;float: left;"><a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="poiout"><i class="fa fa-plus"></i>&nbsp;poi导出</a></div>
+			<div style="float: left;margin-right: 50px"><a v-if="hasPermission('sys:user:save')" class="btn btn-primary"  @click="checkout"><i class="fa fa-plus"></i>&nbsp;下班签退</a></div>
+			<div id="remark"><button onclick="edit()">修订备注</button></div>
+		</div> 
+	    <table id="jqGrid"></table>
+	    <div id="jqGridPager"></div>
+    </div>
+    
+</div>
+<script src="../../js/modules/attendance/attendance.js"></script>
+</body>
+</html>
